@@ -1,7 +1,24 @@
 # Prerequisites
-*.d
+#*.d
+
+# MSVS files
+#*.vcxproj
+#*.filters
+*.user
+*.sdf
+
+# Misc directories
+.vs/
+backup/
+ext/
+ref/
+test/
+
+# Binary files
+bin/
 
 # Object files
+obj/
 *.o
 *.ko
 *.obj
@@ -17,6 +34,7 @@
 *.pch
 
 # Libraries
+lib/
 *.lib
 *.a
 *.la

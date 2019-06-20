@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include\kaphein">
+      <UniqueIdentifier>{a1abb969-070c-4b6b-8c1d-57995cf536fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\kaphein">
+      <UniqueIdentifier>{7784f469-6f41-47ff-a1c8-920933186eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\kaphein\nes">
+      <UniqueIdentifier>{89051b15-3a50-4e33-9de1-c28ab69ddd47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\kaphein\nes">
+      <UniqueIdentifier>{78cdff50-ae65-41e6-9437-98daf25bab22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\kaphein\nes\cart">
+      <UniqueIdentifier>{5e2649ae-1e7f-4f98-9e96-2c0f58373403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\kaphein\nes\cart">
+      <UniqueIdentifier>{587082a8-f405-49d0-bd78-69857b9adcd8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\kaphein\nes\def.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03Apu.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2C02.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\LeSr16.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\AddressDecoder.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuLengthCounter.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuEnvelop.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuPulseSequencer.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuLinearCounter.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuTriangleSequencer.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuNoiseSequencer.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\ClockDivider.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\ShiftRegister15.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuFrameCounter.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\ShiftRegister8.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuDmcReader.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuDmcOutputUnit.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\NesRomHeader.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\CpuAddressDecoder.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\PpuAddressDecoder.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\debug.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\MemoryChipArray.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\Cartridge.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\AxROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\BF909x.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\CNROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\ExROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\FxROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\NROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\PxROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\SxROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\TxROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\UxROM.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\VRC1.h">
+      <Filter>include\kaphein\nes\cart</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2C02.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\LeSr16.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\ClockDivider.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuEnvelop.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuLengthCounter.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuLinearCounter.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\ShiftRegister15.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuNoiseSequencer.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuPulseSequencer.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuTriangleSequencer.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuFrameCounter.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\ShiftRegister8.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuDmcOutputUnit.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\NesRomHeader.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\CpuAddressDecoder.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\PpuAddressDecoder.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\debug.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03Apu.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\Cartridge.c">
+      <Filter>src\kaphein\nes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\BF909x.c">
+      <Filter>src\kaphein\nes\cart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\CNROM.c">
+      <Filter>src\kaphein\nes\cart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\NROM.c">
+      <Filter>src\kaphein\nes\cart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\SxROM.c">
+      <Filter>src\kaphein\nes\cart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\TxROM.c">
+      <Filter>src\kaphein\nes\cart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\UxROM.c">
+      <Filter>src\kaphein\nes\cart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\VRC1.c">
+      <Filter>src\kaphein\nes\cart</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

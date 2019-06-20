@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{312BE047-CA29-4961-AA81-BF27ABDE898C}</ProjectGuid>
+    <RootNamespace>kapheinnes</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="extLib.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="extLib.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="extLib.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="extLib.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)..\..\..\bin\msvc2017\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\..\..\obj\msvc2017\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)..\..\..\bin\msvc2017\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\..\..\obj\msvc2017\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(ProjectDir)..\..\..\bin\msvc2017\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\..\..\obj\msvc2017\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(ProjectDir)..\..\..\bin\msvc2017\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\..\..\obj\msvc2017\$(ProjectName)\$(PlatformTarget)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(KAPHEIN_CORE_PATH)\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</ObjectFileName>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(KAPHEIN_CORE_PATH)\bin\msvc2017\kaphein-core\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kaphein-core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(KAPHEIN_CORE_PATH)\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</ObjectFileName>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(KAPHEIN_CORE_PATH)\bin\msvc2017\kaphein-core\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kaphein-core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(KAPHEIN_CORE_PATH)\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</ObjectFileName>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(KAPHEIN_CORE_PATH)\bin\msvc2017\kaphein-core\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kaphein-core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(KAPHEIN_CORE_PATH)\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</ObjectFileName>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(KAPHEIN_CORE_PATH)\bin\msvc2017\kaphein-core\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kaphein-core.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\kaphein\nes\Cartridge.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\AxROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\BF909x.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\CNROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\ExROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\FxROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\NROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\PxROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\SxROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\TxROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\UxROM.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\cart\VRC1.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\ClockDivider.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\debug.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\def.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\AddressDecoder.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\CpuAddressDecoder.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\MemoryChipArray.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\NesRomHeader.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\PpuAddressDecoder.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuDmcOutputUnit.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03Apu.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuDmcReader.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuEnvelop.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuFrameCounter.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuLengthCounter.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuLinearCounter.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuNoiseSequencer.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuPulseSequencer.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuTriangleSequencer.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\RP2C02.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\LeSr16.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\ShiftRegister15.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\ShiftRegister8.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\kaphein\nes\Cartridge.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\BF909x.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\CNROM.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\NROM.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\SxROM.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\TxROM.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\UxROM.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\cart\VRC1.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\ClockDivider.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\CpuAddressDecoder.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\debug.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\LeSr16.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\NesRomHeader.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\PpuAddressDecoder.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03Apu.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuDmcOutputUnit.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuEnvelop.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuFrameCounter.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuLengthCounter.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuLinearCounter.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuNoiseSequencer.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuPulseSequencer.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03ApuTriangleSequencer.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\RP2C02.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\ShiftRegister15.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\ShiftRegister8.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
