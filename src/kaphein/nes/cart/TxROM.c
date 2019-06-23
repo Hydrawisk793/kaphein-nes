@@ -104,10 +104,10 @@ kaphein_nes_cart_TxROM_construct(
     );
     thisObj->parent.vTable = &cartVTable;
 
-    kaphein_nes_NesRomHeader_getPrgRomBankCount(&thisObj->parent.romHeader, &thisObj->prgROMBankCount);
-    thisObj->prgROMBankCount <<= 1;
-    kaphein_nes_NesRomHeader_getChrRomBankCount(&thisObj->parent.romHeader, &thisObj->chrROMBankCount);
-    thisObj->chrROMBankCount <<= 3;
+    kaphein_nes_NesRomHeader_getPrgRomBankCount(&thisObj->parent.romHeader, &thisObj->prgRomBankCount);
+    thisObj->prgRomBankCount <<= 1;
+    kaphein_nes_NesRomHeader_getChrRomBankCount(&thisObj->parent.romHeader, &thisObj->chrRomBankCount);
+    thisObj->chrRomBankCount <<= 3;
 
     kaphein_nes_NesRomHeader_getVersion(&thisObj->parent.romHeader, &version);
     kaphein_nes_NesRomHeader_hasPrgNvRam(&thisObj->parent.romHeader, &hasPrgNvRam);
@@ -204,21 +204,21 @@ kaphein_nes_cart_TxROM_reset(
 
     //뱅크 번호 레지스터 초기화
     for(i = 0; i < 6; ++i) {
-        thisPtr->chrAddrLatch[i] = 0;
+        thisPtr->chrAddressLatch[i] = 0;
     }
-    thisPtr->prgROMAddrLatch = thisPtr->parent.prgBankAddresses[0];
+    thisPtr->prgRomAddressLatch = thisPtr->parent.prgBankAddresses[0];
 
     //레지스터 셋
     thisPtr->bankConfig = 0;
-    thisPtr->prgRAMConfig = 0;
+    thisPtr->prgRamConfig = 0;
     thisPtr->irqCounter = 0;
     thisPtr->irqReloadValue = 0;
     thisPtr->reloadValueSignal = false;
     thisPtr->irqReloadFlag = false;
     thisPtr->irqEnableFlag = false;
-    thisPtr->isPPUA12Set = ((*thisPtr->parent.ppuAddressBus & 0x1000)? true : false);
+    thisPtr->isPpuA12Set = ((*thisPtr->parent.ppuAddressBus & 0x1000)? true : false);
     thisPtr->irqFlag = false;
-    thisPtr->singleIRQFlag = false;
+    thisPtr->singleIrqFlag = false;
     thisPtr->irqDetectedFlag = false;
     thisPtr->irqIgnoranceCounter = 0;
     thisPtr->irqOccurenceDelayCounter = 0;
@@ -242,17 +242,17 @@ kaphein_nes_cart_TxROM_run(
     if(addr < 0x2000) {
         if(addr & 0x1000) {
             //PPU A12가 0->1이 되면(상승 엣지)
-            if(!thisPtr->irqIgnoranceCounter && !thisPtr->isPPUA12Set) {
+            if(!thisPtr->irqIgnoranceCounter && !thisPtr->isPpuA12Set) {
                 thisPtr->irqDetectedFlag = true;
                 thisPtr->irqOccurenceDelayCounter = 4;
             }
 
             //신호 레벨(High) 기억
-            thisPtr->isPPUA12Set = true;
+            thisPtr->isPpuA12Set = true;
         }
         else {
             //신호 레벨(Low) 기억
-            thisPtr->isPPUA12Set = false;
+            thisPtr->isPpuA12Set = false;
         }
     }
 
@@ -265,7 +265,7 @@ kaphein_nes_cart_TxROM_run(
         clockIrqCounterB(thisPtr);
 
         //이후 발생하는 7개 신호 무시
-        thisPtr->irqIgnoranceCounter = 52;       
+        thisPtr->irqIgnoranceCounter = 52;
         thisPtr->irqDetectedFlag = false;
     }
 
@@ -289,7 +289,7 @@ kaphein_nes_cart_TxROM_doCpuRead(
         errorCode = kaphein_nes_Cartridge_doCpuRead(&thisPtr->parent, address, valueOut);
     break;
     case 0x03:
-        if((thisPtr->prgRAMConfig & HEPRGRAMConfig_ENABLE) != 0) {
+        if((thisPtr->prgRamConfig & HEPRGRAMConfig_ENABLE) != 0) {
             if(thisPtr->parent.memoryChipArray.prgRamSize > 0) {
                 *valueOut = thisPtr->parent.memoryChipArray.prgRam[address & 0x1FFF];
             }
@@ -333,7 +333,7 @@ kaphein_nes_cart_TxROM_doCpuWrite(
     break;
     case 0x06:
     case 0x07:
-        if((thisPtr->prgRAMConfig & HEPRGRAMConfig_VALUES) == HEPRGRAMConfig_ENABLE) {
+        if((thisPtr->prgRamConfig & HEPRGRAMConfig_VALUES) == HEPRGRAMConfig_ENABLE) {
             if(thisPtr->parent.memoryChipArray.prgRamSize > 0) {
                 thisPtr->parent.memoryChipArray.prgRam[address & 0x1FFF] = value;
             }
@@ -359,7 +359,7 @@ kaphein_nes_cart_TxROM_doCpuWrite(
     case 0x0B:
         if(address & 0x0001) {
             //배터리 PRG RAM 설정
-            thisPtr->prgRAMConfig = value;
+            thisPtr->prgRamConfig = value;
         }
         else {
             //네임 테이블 미러링 설정
@@ -378,7 +378,7 @@ kaphein_nes_cart_TxROM_doCpuWrite(
             }
             else {
                 if(thisPtr->reloadValueSignal) {
-                    thisPtr->singleIRQFlag = true;
+                    thisPtr->singleIrqFlag = true;
                 }
 
                 thisPtr->reloadValueSignal = false;
@@ -421,41 +421,41 @@ mapBank(
     switch(thisPtr->bankConfig & HEBankConfig_BANK_SELECT) {
     case HEBankSelectConst_CHR00:
         if(thisPtr->parent.memoryChipArray.chrRomSize > 0) {
-            thisPtr->chrAddrLatch[0] = thisPtr->parent.chrBankAddresses[0] = (((kaphein_SSize)(v & 0xFE)) % thisPtr->chrROMBankCount) << 10;
+            thisPtr->chrAddressLatch[0] = thisPtr->parent.chrBankAddresses[0] = (((kaphein_SSize)(v & 0xFE)) % thisPtr->chrRomBankCount) << 10;
             thisPtr->parent.chrBankAddresses[1] = thisPtr->parent.chrBankAddresses[0] + 0x400;
         }
     break;
     case HEBankSelectConst_CHR08:
         if(thisPtr->parent.memoryChipArray.chrRomSize > 0) {
-            thisPtr->chrAddrLatch[1] = thisPtr->parent.chrBankAddresses[2] = (((kaphein_SSize)(v & 0xFE)) % thisPtr->chrROMBankCount) << 10;
+            thisPtr->chrAddressLatch[1] = thisPtr->parent.chrBankAddresses[2] = (((kaphein_SSize)(v & 0xFE)) % thisPtr->chrRomBankCount) << 10;
             thisPtr->parent.chrBankAddresses[3] = thisPtr->parent.chrBankAddresses[2] + 0x400;
         }
     break;
     case HEBankSelectConst_CHR10:
         if(thisPtr->parent.memoryChipArray.chrRomSize > 0) {
-            thisPtr->chrAddrLatch[2] = thisPtr->parent.chrBankAddresses[4] = ((kaphein_SSize)v % thisPtr->chrROMBankCount) << 10;
+            thisPtr->chrAddressLatch[2] = thisPtr->parent.chrBankAddresses[4] = ((kaphein_SSize)v % thisPtr->chrRomBankCount) << 10;
         }
     break;
     case HEBankSelectConst_CHR14:
         if(thisPtr->parent.memoryChipArray.chrRomSize > 0) {
-            thisPtr->chrAddrLatch[3] = thisPtr->parent.chrBankAddresses[5] = ((kaphein_SSize)v % thisPtr->chrROMBankCount) << 10;
+            thisPtr->chrAddressLatch[3] = thisPtr->parent.chrBankAddresses[5] = ((kaphein_SSize)v % thisPtr->chrRomBankCount) << 10;
         }
     break;
     case HEBankSelectConst_CHR18:
         if(thisPtr->parent.memoryChipArray.chrRomSize > 0) {
-            thisPtr->chrAddrLatch[4] = thisPtr->parent.chrBankAddresses[6] = ((kaphein_SSize)v % thisPtr->chrROMBankCount) << 10;
+            thisPtr->chrAddressLatch[4] = thisPtr->parent.chrBankAddresses[6] = ((kaphein_SSize)v % thisPtr->chrRomBankCount) << 10;
         }
     break;
     case HEBankSelectConst_CHR1C:
         if(thisPtr->parent.memoryChipArray.chrRomSize > 0) {
-            thisPtr->chrAddrLatch[5] = thisPtr->parent.chrBankAddresses[7] = ((kaphein_SSize)v % thisPtr->chrROMBankCount) << 10;
+            thisPtr->chrAddressLatch[5] = thisPtr->parent.chrBankAddresses[7] = ((kaphein_SSize)v % thisPtr->chrRomBankCount) << 10;
         }
     break;
     case HEBankSelectConst_PRG8:
-        thisPtr->prgROMAddrLatch = thisPtr->parent.prgBankAddresses[((thisPtr->bankConfig & HEBankConfig_PRG_MODE)?(2):(0))] = (((kaphein_SSize)(v & 0x3F)) % thisPtr->prgROMBankCount) << 13;
+        thisPtr->prgRomAddressLatch = thisPtr->parent.prgBankAddresses[((thisPtr->bankConfig & HEBankConfig_PRG_MODE)?(2):(0))] = (((kaphein_SSize)(v & 0x3F)) % thisPtr->prgRomBankCount) << 13;
     break;
     case HEBankSelectConst_PRGA:
-        thisPtr->parent.prgBankAddresses[1] = (((kaphein_SSize)(v & 0x3F)) % thisPtr->prgROMBankCount) << 13;
+        thisPtr->parent.prgBankAddresses[1] = (((kaphein_SSize)(v & 0x3F)) % thisPtr->prgRomBankCount) << 13;
     break;
     }
 }
@@ -472,32 +472,32 @@ setBankMode(
     
     if(v & HEBankConfig_PRG_MODE) {
         thisPtr->parent.prgBankAddresses[0] = thisPtr->parent.lastPrgBankAddresses[0];
-        thisPtr->parent.prgBankAddresses[2] = thisPtr->prgROMAddrLatch;
+        thisPtr->parent.prgBankAddresses[2] = thisPtr->prgRomAddressLatch;
     }
     else {
-        thisPtr->parent.prgBankAddresses[0] = thisPtr->prgROMAddrLatch;
+        thisPtr->parent.prgBankAddresses[0] = thisPtr->prgRomAddressLatch;
         thisPtr->parent.prgBankAddresses[2] = thisPtr->parent.lastPrgBankAddresses[0];
     }
     
     if(v & HEBankConfig_CHR_MODE) {
-        thisPtr->parent.chrBankAddresses[0] = thisPtr->chrAddrLatch[2];
-        thisPtr->parent.chrBankAddresses[1] = thisPtr->chrAddrLatch[3];
-        thisPtr->parent.chrBankAddresses[2] = thisPtr->chrAddrLatch[4];
-        thisPtr->parent.chrBankAddresses[3] = thisPtr->chrAddrLatch[5];
-        thisPtr->parent.chrBankAddresses[4] = thisPtr->chrAddrLatch[0];
+        thisPtr->parent.chrBankAddresses[0] = thisPtr->chrAddressLatch[2];
+        thisPtr->parent.chrBankAddresses[1] = thisPtr->chrAddressLatch[3];
+        thisPtr->parent.chrBankAddresses[2] = thisPtr->chrAddressLatch[4];
+        thisPtr->parent.chrBankAddresses[3] = thisPtr->chrAddressLatch[5];
+        thisPtr->parent.chrBankAddresses[4] = thisPtr->chrAddressLatch[0];
         thisPtr->parent.chrBankAddresses[5] = thisPtr->parent.chrBankAddresses[4] + 0x400;
-        thisPtr->parent.chrBankAddresses[6] = thisPtr->chrAddrLatch[1];
+        thisPtr->parent.chrBankAddresses[6] = thisPtr->chrAddressLatch[1];
         thisPtr->parent.chrBankAddresses[7] = thisPtr->parent.chrBankAddresses[6] + 0x400;
     }
     else {
-        thisPtr->parent.chrBankAddresses[0] = thisPtr->chrAddrLatch[0];
+        thisPtr->parent.chrBankAddresses[0] = thisPtr->chrAddressLatch[0];
         thisPtr->parent.chrBankAddresses[1] = thisPtr->parent.chrBankAddresses[0] + 0x400;
-        thisPtr->parent.chrBankAddresses[2] = thisPtr->chrAddrLatch[1];
+        thisPtr->parent.chrBankAddresses[2] = thisPtr->chrAddressLatch[1];
         thisPtr->parent.chrBankAddresses[3] = thisPtr->parent.chrBankAddresses[2] + 0x400;
-        thisPtr->parent.chrBankAddresses[4] = thisPtr->chrAddrLatch[2];
-        thisPtr->parent.chrBankAddresses[5] = thisPtr->chrAddrLatch[3];
-        thisPtr->parent.chrBankAddresses[6] = thisPtr->chrAddrLatch[4];
-        thisPtr->parent.chrBankAddresses[7] = thisPtr->chrAddrLatch[5];
+        thisPtr->parent.chrBankAddresses[4] = thisPtr->chrAddressLatch[2];
+        thisPtr->parent.chrBankAddresses[5] = thisPtr->chrAddressLatch[3];
+        thisPtr->parent.chrBankAddresses[6] = thisPtr->chrAddressLatch[4];
+        thisPtr->parent.chrBankAddresses[7] = thisPtr->chrAddressLatch[5];
     }
 }
 
@@ -541,19 +541,19 @@ clockIrqCounterA(
             if(thisPtr->irqEnableFlag) {          //IRQ가 활성화되어 있으면
                 thisPtr->irqFlag = true;         //IRQ 플래그 셋
                 *thisPtr->parent.cpuIrqBus = kaphein_nes_InterruptSignal_OCCUR;
-                thisPtr->singleIRQFlag = false;
+                thisPtr->singleIrqFlag = false;
                 //_tprintf(_T("MMC3 IRQ on scanline == %3d, cycles == %3d\n"), ppu->getScanline(), ppu->getCycles());
             }
         }
     }
 
-    if(thisPtr->singleIRQFlag) {
+    if(thisPtr->singleIrqFlag) {
         if(thisPtr->irqEnableFlag) {              //IRQ가 활성화되어 있으면
             thisPtr->irqFlag = true;             //IRQ 플래그 셋
             *thisPtr->parent.cpuIrqBus = kaphein_nes_InterruptSignal_OCCUR;
         }
 
-        thisPtr->singleIRQFlag = false;
+        thisPtr->singleIrqFlag = false;
     }
 
 }

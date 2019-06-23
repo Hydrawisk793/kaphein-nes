@@ -10,17 +10,17 @@ struct kaphein_nes_cart_TxROM
 {
     struct kaphein_nes_Cartridge parent;
     
-    kaphein_SSize chrROMBankCount;
+    kaphein_SSize chrRomBankCount;
 
-    kaphein_SSize prgROMBankCount;
+    kaphein_SSize prgRomBankCount;
 
-    kaphein_SSize chrAddrLatch[6];
+    kaphein_SSize chrAddressLatch[6];
     
-    kaphein_SSize prgROMAddrLatch;
+    kaphein_SSize prgRomAddressLatch;
     
     kaphein_UInt8 bankConfig;
 
-    kaphein_UInt8 prgRAMConfig;
+    kaphein_UInt8 prgRamConfig;
     
     kaphein_UInt8 irqCounter;
     
@@ -32,11 +32,11 @@ struct kaphein_nes_cart_TxROM
     
     bool irqEnableFlag;
     
-    bool isPPUA12Set;
+    bool isPpuA12Set;
     
     bool irqFlag;
     
-    bool singleIRQFlag;
+    bool singleIrqFlag;
     
     bool irqDetectedFlag;
     
