@@ -1,9 +1,7 @@
 #include "kaphein/mem/utils.h"
-#include "kaphein/nes/LeSr16.h"
+#include "kaphein/nes/ShiftRegister16.h"
 #include "kaphein/nes/ShiftRegister8.h"
 #include "kaphein/nes/RP2C02.h"
-
-//TODO : 시퀀싱 타이밍 재조정
 
 /* **************************************************************** */
 /* Internal declarations */
@@ -75,6 +73,7 @@ struct kaphein_nes_RP2C02_Impl
 
     ////////////////////////////////
     //Output Device
+    //TODO : 자체 임시 버퍼를 사용하도록 변경
     
     kaphein_UInt32 * _rgbTable;             //RGB 색상 테이블
     kaphein_UInt32 * _surface;              //서페이스
@@ -770,6 +769,8 @@ kaphein_nes_RP2C02_run(
     else {
         struct kaphein_nes_RP2C02_Impl *const impl = (struct kaphein_nes_RP2C02_Impl *)thisObj->impl_;
 
+        //TODO : 시퀀싱 타이밍 재조정
+
         ////////////////////////////////////////////////
         //스캔라인별 시퀀서 실행
 
@@ -829,13 +830,12 @@ kaphein_nes_RP2C02_run(
         if(++impl->cycles == CYCLES_PER_SCANLINE) {
             impl->cycles = 0;
             
-            //프레임 하나를 다 처리 했으면
             if(++impl->scanline == TOTAL_SCANLINE_COUNT) {
                 impl->scanline = 0;
 
-                impl->oddFrame = !impl->oddFrame;
-
                 impl->regDecayedValue = 0x00;
+
+                impl->oddFrame = !impl->oddFrame;
             }
 
             switch(impl->scanline) {
@@ -845,13 +845,13 @@ kaphein_nes_RP2C02_run(
             case VISIBLE_SCANLINE_COUNT:
                 impl->sequencerCodeBlock = SQ_onPostRendering;
             break;
-            case (VISIBLE_SCANLINE_COUNT+1):
+            case (VISIBLE_SCANLINE_COUNT + 1):
                 impl->sequencerCodeBlock = SQ_onVBlankStart;
             break;
-            case (VISIBLE_SCANLINE_COUNT+2):
+            case (VISIBLE_SCANLINE_COUNT + 2):
                 impl->sequencerCodeBlock = SQ_onVBlank;
             break;
-            case (TOTAL_SCANLINE_COUNT-1):
+            case (TOTAL_SCANLINE_COUNT - 1):
                 impl->sequencerCodeBlock = SQ_onPreRendering;
             break;
             }
@@ -1340,7 +1340,7 @@ renderPixel(
     {
         PIXEL_INDEX_BITMAP = 0x03
     };
-    static const kaphein_UInt8 BITMASK[8] = {
+    static const kaphein_UInt8 BITMASK[] = {
         0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01
     };
     struct kaphein_nes_RP2C02_Impl *const impl = (struct kaphein_nes_RP2C02_Impl *)thisObj->impl_;
@@ -1350,7 +1350,7 @@ renderPixel(
     unsigned int r1;
     const bool isLeftCornerClippingSpritesEnabled = ((impl->regMask & HEMask_DISABLE_CLIP_SPR) == 0) && impl->cycles < 9;
 
-    ////////////////////////////
+    ////////////////////////////////
     //배경 픽셀 생성
 
     bgPixelIndex = 0;
@@ -1377,7 +1377,7 @@ renderPixel(
         }
     }
 
-    ////////////////////////////
+    ////////////////////////////////
 
     ////////////////////////////////
     //스프라이트 픽셀 생성
@@ -1387,30 +1387,31 @@ renderPixel(
 
     if(impl->regMask & HEMask_DISPLAY_SPR) {
         for(r1 = 0; r1 < impl->sprCount; ++r1) {
-            impl->sprPixelIndex[r1] = 0;
+            const kaphein_UInt8 sprAttr = impl->sprAttr[r1];
+            kaphein_UInt8 sprPixelIndex = 0;
             
             if(impl->sprPosXCounter[r1] > -8) {
                 if(impl->sprPosXCounter[r1] < 1) {
-                    if((impl->sprAttr[r1] & HESprFlag_FLIP_H) != 0) {
-                        impl->sprPixelIndex[r1] = 
+                    if((sprAttr & HESprFlag_FLIP_H) != 0) {
+                        sprPixelIndex = 
                             kaphein_nes_ShiftRegister8_shiftRight(impl->sprTileBitmapL + r1, false)
                             | kaphein_nes_ShiftRegister8_shiftRight(impl->sprTileBitmapH + r1, false) << 1
                         ;
                     }
                     else {
-                        impl->sprPixelIndex[r1] = 
+                        sprPixelIndex = 
                             kaphein_nes_ShiftRegister8_shiftLeft(impl->sprTileBitmapL + r1, false)
                             | kaphein_nes_ShiftRegister8_shiftLeft(impl->sprTileBitmapH + r1, false) << 1
                         ;
                     }
                     
-                    if((impl->sprPixelIndex[r1] & PIXEL_INDEX_BITMAP) != 0) {
-                        impl->sprPixelIndex[r1] |= ((impl->sprAttr[r1] & HESprFlag_ATTRIBUTE) << 2);
+                    if((sprPixelIndex & PIXEL_INDEX_BITMAP) != 0) {
+                        sprPixelIndex |= ((sprAttr & HESprFlag_ATTRIBUTE) << 2);
 
                         //우선 순위가 높고 투명하지 않은 픽셀 선택
                         if(lastSprPixelIndex == 0) {
-                            lastSprPixelIndex = impl->sprPixelIndex[r1];
-                            lastSprPriority = impl->sprAttr[r1] & HESprFlag_PRIORITY;
+                            lastSprPixelIndex = sprPixelIndex;
+                            lastSprPriority = sprAttr & HESprFlag_PRIORITY;
                         }
                     }
                 }
@@ -1418,6 +1419,8 @@ renderPixel(
                     --impl->sprPosXCounter[r1];
                 }
             }
+
+            impl->sprPixelIndex[r1] = sprPixelIndex;
         }
 
         //SPR 클립핑
@@ -1510,9 +1513,9 @@ loadBGBitmapIntoShiftRegister(
 {
     struct kaphein_nes_RP2C02_Impl *const impl = (struct kaphein_nes_RP2C02_Impl *)thisObj->impl_;
 
-    //읽은 비트맵 비트 값을 시프트 레지스터 상위 바이트에 셋
-    kaphein_nes_LeSr16_setHighByte(&impl->tileBitmapL, impl->tempBitmapL);
-    kaphein_nes_LeSr16_setHighByte(&impl->tileBitmapH, impl->tempBitmapH);
+    //읽은 비트맵 비트 값을 시프트 레지스터 하위 바이트에 셋
+    impl->tileBitmapL = (impl->tileBitmapL & 0xFF00) | (impl->tempBitmapL & 0xFF);
+    impl->tileBitmapH = (impl->tileBitmapH & 0xFF00) | (impl->tempBitmapH & 0xFF);
 
     //현재 타일에 해당하는 속성 값 추출 후 ((Y축/16)%2와 ((X축/16)%2)로 계산)
     //읽은 속성 값을 속성 래치에 셋

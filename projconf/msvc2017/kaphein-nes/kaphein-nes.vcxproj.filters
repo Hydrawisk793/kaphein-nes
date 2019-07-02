@@ -41,9 +41,6 @@
     <ClInclude Include="..\..\..\include\kaphein\nes\RP2C02.h">
       <Filter>include\kaphein\nes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\kaphein\nes\LeSr16.h">
-      <Filter>include\kaphein\nes</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\kaphein\nes\AddressDecoder.h">
       <Filter>include\kaphein\nes</Filter>
     </ClInclude>
@@ -134,12 +131,12 @@
     <ClInclude Include="..\..\..\include\kaphein\nes\cart\VRC1.h">
       <Filter>include\kaphein\nes\cart</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\kaphein\nes\ShiftRegister16.h">
+      <Filter>include\kaphein\nes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\kaphein\nes\RP2C02.c">
-      <Filter>src\kaphein\nes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kaphein\nes\LeSr16.c">
       <Filter>src\kaphein\nes</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\kaphein\nes\ClockDivider.c">
@@ -216,6 +213,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\kaphein\nes\cart\VRC1.c">
       <Filter>src\kaphein\nes\cart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kaphein\nes\ShiftRegister16.c">
+      <Filter>src\kaphein\nes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

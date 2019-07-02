@@ -94,12 +94,11 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(KAPHEIN_CORE_PATH)\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</ObjectFileName>
       <CompileAs>CompileAsC</CompileAs>
+      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(KAPHEIN_CORE_PATH)\bin\msvc2017\kaphein-core\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
@@ -111,12 +110,11 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(KAPHEIN_CORE_PATH)\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</ObjectFileName>
       <CompileAs>CompileAsC</CompileAs>
+      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(KAPHEIN_CORE_PATH)\bin\msvc2017\kaphein-core\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
@@ -130,14 +128,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(KAPHEIN_CORE_PATH)\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</ObjectFileName>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <CompileAs>CompileAsC</CompileAs>
+      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -153,14 +150,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(KAPHEIN_CORE_PATH)\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)dummy\dummy\dummy\%(RelativeDir)</ObjectFileName>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <CompileAs>CompileAsC</CompileAs>
+      <PreprocessorDefinitions>KAPHEIN_COMPOPT_DLL_API_MODE#1;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -202,7 +198,7 @@
     <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuPulseSequencer.h" />
     <ClInclude Include="..\..\..\include\kaphein\nes\RP2A03ApuTriangleSequencer.h" />
     <ClInclude Include="..\..\..\include\kaphein\nes\RP2C02.h" />
-    <ClInclude Include="..\..\..\include\kaphein\nes\LeSr16.h" />
+    <ClInclude Include="..\..\..\include\kaphein\nes\ShiftRegister16.h" />
     <ClInclude Include="..\..\..\include\kaphein\nes\ShiftRegister15.h" />
     <ClInclude Include="..\..\..\include\kaphein\nes\ShiftRegister8.h" />
   </ItemGroup>
@@ -218,7 +214,7 @@
     <ClCompile Include="..\..\..\src\kaphein\nes\ClockDivider.c" />
     <ClCompile Include="..\..\..\src\kaphein\nes\CpuAddressDecoder.c" />
     <ClCompile Include="..\..\..\src\kaphein\nes\debug.c" />
-    <ClCompile Include="..\..\..\src\kaphein\nes\LeSr16.c" />
+    <ClCompile Include="..\..\..\src\kaphein\nes\ShiftRegister16.c" />
     <ClCompile Include="..\..\..\src\kaphein\nes\NesRomHeader.c" />
     <ClCompile Include="..\..\..\src\kaphein\nes\PpuAddressDecoder.c" />
     <ClCompile Include="..\..\..\src\kaphein\nes\RP2A03Apu.c" />

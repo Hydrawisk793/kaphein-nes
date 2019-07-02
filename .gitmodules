@@ -1,0 +1,3 @@
+[submodule "ext/kaphein-core"]
+	path = ext/kaphein-core
+	url = https://github.com/Hydrawisk793/kaphein-core

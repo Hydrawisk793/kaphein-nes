@@ -55,7 +55,7 @@ kaphein_nes_Cartridge_construct(
             case 16:
                 if(KAPHEIN_NULL == romHeader) {
                     resultErrorCode = (*stream->vTable->read)(
-                        stream
+                        stream->thisObj
                         , thisObj->romHeader.u.a, KAPHEIN_ssizeof(thisObj->romHeader.u.a)
                         , &readByteCount
                     );
@@ -101,7 +101,7 @@ kaphein_nes_Cartridge_construct(
                     
                     if(KAPHEIN_NULL != thisObj->memoryChipArray.trainer) {
                         resultErrorCode = (*stream->vTable->read)(
-                            stream
+                            stream->thisObj
                             , thisObj->memoryChipArray.trainer, nesRomTrainerSize
                             , &readByteCount
                         );
@@ -133,7 +133,7 @@ kaphein_nes_Cartridge_construct(
                     thisObj->memoryChipArray.prgRomSize = prgRomChipSize;
                     
                     resultErrorCode = (*stream->vTable->read)(
-                        stream
+                        stream->thisObj
                         , thisObj->memoryChipArray.prgRom, prgRomChipSize
                         , &readByteCount
                     );
@@ -163,7 +163,7 @@ kaphein_nes_Cartridge_construct(
                         thisObj->memoryChipArray.chrRomSize = chrRomChipSize;
                         
                         resultErrorCode = (*stream->vTable->read)(
-                            stream
+                            stream->thisObj
                             , thisObj->memoryChipArray.chrRom, chrRomChipSize
                             , &readByteCount
                         );

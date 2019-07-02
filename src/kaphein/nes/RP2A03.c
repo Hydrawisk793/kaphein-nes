@@ -3,23 +3,23 @@
 #include "kaphein/mem/utils.h"
 #include "kaphein/nes/AddressDecoder.h"
 #include "kaphein/nes/RP2A03.h"
-#include "kaphein/nes/LeSr16.h"
+#include "kaphein/nes/ShiftRegister16.h"
 #include "kaphein/nes/debug.h"
 
 /* **************************************************************** */
 /* Internal declarations */
 
-enum HEStatus
+enum RP2A03_Status
 {
-    HEStatus_P_CARRY = 0x01
-    , HEStatus_P_ZERO = 0x02
-    , HEStatus_P_DISABLE_IRQ = 0x04
-    , HEStatus_P_DECIMAL = 0x08
-    , HEStatus_P_BRK = 0x10
-    , HEStatus_P_UNUSED = 0x20
-    , HEStatus_P_UB = HEStatus_P_BRK | HEStatus_P_UNUSED
-    , HEStatus_P_OVERFLOW = 0x40
-    , HEStatus_P_NEGATIVE = 0x80
+    RP2A03_Status_P_CARRY = 0x01
+    , RP2A03_Status_P_ZERO = 0x02
+    , RP2A03_Status_P_DISABLE_IRQ = 0x04
+    , RP2A03_Status_P_DECIMAL = 0x08
+    , RP2A03_Status_P_BRK = 0x10
+    , RP2A03_Status_P_UNUSED = 0x20
+    , RP2A03_Status_P_UB = RP2A03_Status_P_BRK | RP2A03_Status_P_UNUSED
+    , RP2A03_Status_P_OVERFLOW = 0x40
+    , RP2A03_Status_P_NEGATIVE = 0x80
 };
 
 enum RP2A03_CoreSeq
@@ -224,10 +224,10 @@ struct kaphein_nes_RP2A03_Impl
         //(1, I) IRQ Signal
 	    enum kaphein_nes_InterruptSignal * irq;
 
-        //(1, O) LeSr16, 4016R, P1 Button Input
+        //(1, O) ShiftRegister16, 4016R, P1 Button Input
 	    kaphein_UInt16 * p1Ctrl;
 
-        //(1, O) LeSr16, 4017R, P2 Button Input
+        //(1, O) ShiftRegister16, 4017R, P2 Button Input
 	    kaphein_UInt16 * p2Ctrl;
 
         //(16, O) Address bus
@@ -246,21 +246,16 @@ struct kaphein_nes_RP2A03_Impl
         {
             kaphein_UInt16 pc;
 
-            //누산기
             kaphein_UInt8 a;
 
             kaphein_UInt8 dummy;
 
-            //X 인덱스
             kaphein_UInt8 x;
 
-            //Y 인덱스
             kaphein_UInt8 y;
 
-            //상태 레지스터
             kaphein_UInt8 p;
 
-            //스택 포인터
             kaphein_UInt8 s;
         } reg;
 
@@ -2141,12 +2136,12 @@ RP2A03_readRegister(
     switch(address) {
     //P1 Controller
 	case 0x16:
-        value = (*impl->bus.ioData & 0xE0) | kaphein_nes_LeSr16_shiftLeft(impl->bus.p1Ctrl, false);
+        value = (*impl->bus.ioData & 0xE0) | kaphein_nes_ShiftRegister16_shiftLeft(impl->bus.p1Ctrl, false);
     break;
 
     //P2 Controller
 	case 0x17:
-        value = (*impl->bus.ioData & 0xE0) | kaphein_nes_LeSr16_shiftLeft(impl->bus.p2Ctrl, false);
+        value = (*impl->bus.ioData & 0xE0) | kaphein_nes_ShiftRegister16_shiftLeft(impl->bus.p2Ctrl, false);
     break;
     default:
         kaphein_nes_RP2A03Apu_readRegister(
@@ -2227,7 +2222,7 @@ RP2A03_pollInterrupts(
 
     if(
         HEInterrupt_NMI != impl->core.occuredInterrupt
-        && (impl->core.reg.p & HEStatus_P_DISABLE_IRQ) == 0
+        && (impl->core.reg.p & RP2A03_Status_P_DISABLE_IRQ) == 0
     ) {
         bool truth;
         
@@ -2251,10 +2246,10 @@ RP2A03_updateStatusFlagN(
 )
 {
     if((impl->core.lOperand & 0x80) != 0) {
-        impl->core.reg.p |= HEStatus_P_NEGATIVE;
+        impl->core.reg.p |= RP2A03_Status_P_NEGATIVE;
     }
     else {
-        impl->core.reg.p &= ~HEStatus_P_NEGATIVE;
+        impl->core.reg.p &= ~RP2A03_Status_P_NEGATIVE;
     }
 };
 
@@ -2265,10 +2260,10 @@ RP2A03_updateStatusFlagV(
 )
 {
     if(impl->core.overflow) {
-        impl->core.reg.p |= HEStatus_P_OVERFLOW;
+        impl->core.reg.p |= RP2A03_Status_P_OVERFLOW;
     }
     else {
-        impl->core.reg.p &= ~HEStatus_P_OVERFLOW;
+        impl->core.reg.p &= ~RP2A03_Status_P_OVERFLOW;
     }
 };
 
@@ -2279,10 +2274,10 @@ RP2A03_updateStatusFlagZ(
 )
 {
     if(impl->core.lOperand == 0) {
-        impl->core.reg.p |= HEStatus_P_ZERO;
+        impl->core.reg.p |= RP2A03_Status_P_ZERO;
     }
     else {
-        impl->core.reg.p &= ~HEStatus_P_ZERO;
+        impl->core.reg.p &= ~RP2A03_Status_P_ZERO;
     }
 };
 
@@ -2293,10 +2288,10 @@ RP2A03_updateStatusFlagC(
 )
 {
     if(impl->core.carry) {
-        impl->core.reg.p |= HEStatus_P_CARRY;
+        impl->core.reg.p |= RP2A03_Status_P_CARRY;
     }
     else {
-        impl->core.reg.p &= ~HEStatus_P_CARRY;
+        impl->core.reg.p &= ~RP2A03_Status_P_CARRY;
     }
 };
 
@@ -2348,28 +2343,28 @@ RP2A03_testBranchCondition(
 {
     switch(impl->core.inst) {
 	case HEInst_BPL:
-		impl->core.lOperand = !(impl->core.reg.p & HEStatus_P_NEGATIVE);
+		impl->core.lOperand = !(impl->core.reg.p & RP2A03_Status_P_NEGATIVE);
 	break;
 	case HEInst_BMI:
-		impl->core.lOperand = !!(impl->core.reg.p & HEStatus_P_NEGATIVE);
+		impl->core.lOperand = !!(impl->core.reg.p & RP2A03_Status_P_NEGATIVE);
 	break;
 	case HEInst_BVC:
-		impl->core.lOperand = !(impl->core.reg.p & HEStatus_P_OVERFLOW);
+		impl->core.lOperand = !(impl->core.reg.p & RP2A03_Status_P_OVERFLOW);
 	break;
 	case HEInst_BVS:
-		impl->core.lOperand = !!(impl->core.reg.p & HEStatus_P_OVERFLOW);
+		impl->core.lOperand = !!(impl->core.reg.p & RP2A03_Status_P_OVERFLOW);
 	break;
 	case HEInst_BNE:
-		impl->core.lOperand = !(impl->core.reg.p & HEStatus_P_ZERO);
+		impl->core.lOperand = !(impl->core.reg.p & RP2A03_Status_P_ZERO);
 	break;
 	case HEInst_BEQ:
-		impl->core.lOperand = !!(impl->core.reg.p & HEStatus_P_ZERO);
+		impl->core.lOperand = !!(impl->core.reg.p & RP2A03_Status_P_ZERO);
 	break;
 	case HEInst_BCC:
-		impl->core.lOperand = !(impl->core.reg.p & HEStatus_P_CARRY);
+		impl->core.lOperand = !(impl->core.reg.p & RP2A03_Status_P_CARRY);
 	break;
 	case HEInst_BCS:
-		impl->core.lOperand = !!(impl->core.reg.p & HEStatus_P_CARRY);
+		impl->core.lOperand = !!(impl->core.reg.p & RP2A03_Status_P_CARRY);
 	break;
     }
 }
@@ -2534,7 +2529,7 @@ RP2A03_executeInstruction(
 		if(impl->cycles == 0) {
         #endif
             impl->core.lOperand = impl->core.reg.a;
-            impl->core.carry = (impl->core.reg.p & HEStatus_P_CARRY) != 0;
+            impl->core.carry = (impl->core.reg.p & RP2A03_Status_P_CARRY) != 0;
             RP2A03_alu_add(impl);
         #ifdef IMPLEMENT_PIPELINING
         }
@@ -2552,7 +2547,7 @@ RP2A03_executeInstruction(
 		if(impl->cycles == 0) {
         #endif
             impl->core.lOperand = impl->core.reg.a;
-            impl->core.carry = (impl->core.reg.p & HEStatus_P_CARRY) != 0;
+            impl->core.carry = (impl->core.reg.p & RP2A03_Status_P_CARRY) != 0;
             RP2A03_alu_sub(impl);
         #ifdef IMPLEMENT_PIPELINING
         }
@@ -2576,10 +2571,10 @@ RP2A03_executeInstruction(
             impl->core.lOperand = impl->core.reg.a;
 			RP2A03_updateStatusFlagNZ(impl);
             if((impl->core.lOperand & 0x80) != 0) {
-                impl->core.reg.p |= HEStatus_P_CARRY;
+                impl->core.reg.p |= RP2A03_Status_P_CARRY;
             }
             else {
-                impl->core.reg.p &= ~HEStatus_P_CARRY;
+                impl->core.reg.p &= ~RP2A03_Status_P_CARRY;
             }
         #ifdef IMPLEMENT_PIPELINING
             impl->pipelined = false; //파이프라이닝 해제
@@ -2648,23 +2643,23 @@ RP2A03_executeInstruction(
             impl->core.carry = (impl->core.reg.a & 0x01) != 0; //LSB 기억
 			impl->core.lOperand = impl->core.reg.a;
             impl->core.lOperand >>= 1;	        //9bit 로테이트 연산
-            impl->core.lOperand |= ((impl->core.reg.p&HEStatus_P_CARRY)?(0x80):(0));
+            impl->core.lOperand |= ((impl->core.reg.p&RP2A03_Status_P_CARRY)?(0x80):(0));
             impl->core.reg.a = impl->core.lOperand;                    //결과를 A 레지스터에 기억
 		    RP2A03_updateStatusFlagNZ(impl);                        //N, Z 플래그 셋
             switch((impl->core.reg.a&0x60) >> 5){
             case 0:
-                impl->core.reg.p &= ~(HEStatus_P_CARRY|HEStatus_P_OVERFLOW);
+                impl->core.reg.p &= ~(RP2A03_Status_P_CARRY|RP2A03_Status_P_OVERFLOW);
             break;
             case 1:
-                impl->core.reg.p |= HEStatus_P_OVERFLOW;
-                impl->core.reg.p &= ~HEStatus_P_CARRY;
+                impl->core.reg.p |= RP2A03_Status_P_OVERFLOW;
+                impl->core.reg.p &= ~RP2A03_Status_P_CARRY;
             break;
             case 2:
-                impl->core.reg.p |= (HEStatus_P_CARRY|HEStatus_P_OVERFLOW);
+                impl->core.reg.p |= (RP2A03_Status_P_CARRY|RP2A03_Status_P_OVERFLOW);
             break;
             case 3:
-                impl->core.reg.p |= HEStatus_P_CARRY;
-                impl->core.reg.p &= ~HEStatus_P_OVERFLOW;
+                impl->core.reg.p |= RP2A03_Status_P_CARRY;
+                impl->core.reg.p &= ~RP2A03_Status_P_OVERFLOW;
             break;
             }
         #ifdef IMPLEMENT_PIPELINING
@@ -2753,7 +2748,7 @@ RP2A03_executeInstruction(
             impl->core.carry = (impl->core.rOperand & 0x80) != 0; //MSB 기억
 			impl->core.lOperand = impl->core.rOperand;
             impl->core.lOperand <<= 1;	        //9bit 로테이트 연산
-            impl->core.lOperand |= ((impl->core.reg.p&HEStatus_P_CARRY)?(0x01):(0));
+            impl->core.lOperand |= ((impl->core.reg.p&RP2A03_Status_P_CARRY)?(0x01):(0));
         #ifdef IMPLEMENT_PIPELINING
         }
         else {
@@ -2780,7 +2775,7 @@ RP2A03_executeInstruction(
             impl->core.carry = (impl->core.rOperand & 0x01) != 0; //LSB 기억
 			impl->core.lOperand = impl->core.rOperand;
             impl->core.lOperand >>= 1;	        //9bit 로테이트 연산
-            impl->core.lOperand |= ((impl->core.reg.p&HEStatus_P_CARRY)?(0x80):(0));
+            impl->core.lOperand |= ((impl->core.reg.p&RP2A03_Status_P_CARRY)?(0x80):(0));
         #ifdef IMPLEMENT_PIPELINING
         }
         else {
@@ -2841,8 +2836,8 @@ RP2A03_executeInstruction(
         #endif
             impl->core.reg.a |= (impl->core.lOperand & 0xFF);
             RP2A03_updateStatusFlagC(impl);
-            ((impl->core.reg.a & 0x80)?(impl->core.reg.p |= HEStatus_P_NEGATIVE):(impl->core.reg.p &= ~HEStatus_P_NEGATIVE));
-            ((impl->core.reg.a)?(impl->core.reg.p &= ~HEStatus_P_ZERO):(impl->core.reg.p |= HEStatus_P_ZERO));
+            ((impl->core.reg.a & 0x80)?(impl->core.reg.p |= RP2A03_Status_P_NEGATIVE):(impl->core.reg.p &= ~RP2A03_Status_P_NEGATIVE));
+            ((impl->core.reg.a)?(impl->core.reg.p &= ~RP2A03_Status_P_ZERO):(impl->core.reg.p |= RP2A03_Status_P_ZERO));
         #ifdef IMPLEMENT_PIPELINING
             impl->pipelined = false;  //원인을 찾을때 까지 이 문장 유지
 		}
@@ -2861,8 +2856,8 @@ RP2A03_executeInstruction(
         #endif
             impl->core.reg.a ^= (impl->core.lOperand & 0xFF);
             RP2A03_updateStatusFlagC(impl);
-            ((impl->core.reg.a & 0x80)?(impl->core.reg.p |= HEStatus_P_NEGATIVE):(impl->core.reg.p &= ~HEStatus_P_NEGATIVE));
-            ((impl->core.reg.a)?(impl->core.reg.p &= ~HEStatus_P_ZERO):(impl->core.reg.p |= HEStatus_P_ZERO));
+            ((impl->core.reg.a & 0x80)?(impl->core.reg.p |= RP2A03_Status_P_NEGATIVE):(impl->core.reg.p &= ~RP2A03_Status_P_NEGATIVE));
+            ((impl->core.reg.a)?(impl->core.reg.p &= ~RP2A03_Status_P_ZERO):(impl->core.reg.p |= RP2A03_Status_P_ZERO));
         #ifdef IMPLEMENT_PIPELINING
             impl->pipelined = false;  //원인을 찾을때 까지 이 문장 유지
 		}
@@ -2875,7 +2870,7 @@ RP2A03_executeInstruction(
             impl->core.carry = (impl->core.rOperand & 0x80) != 0; //MSB 기억
 			impl->core.lOperand = impl->core.rOperand;
             impl->core.lOperand <<= 1;	        //9bit 로테이트 연산
-            impl->core.lOperand |= ((impl->core.reg.p&HEStatus_P_CARRY)?(0x01):(0));
+            impl->core.lOperand |= ((impl->core.reg.p&RP2A03_Status_P_CARRY)?(0x01):(0));
             impl->core.rOperand = lowByte(impl->core.lOperand);
         #ifdef IMPLEMENT_PIPELINING
         }
@@ -2898,14 +2893,14 @@ RP2A03_executeInstruction(
             impl->core.carry = (impl->core.rOperand & 0x01) != 0; //LSB 기억
 			impl->core.lOperand = impl->core.rOperand;
             impl->core.lOperand >>= 1;	        //9bit 로테이트 연산
-            impl->core.lOperand |= ((impl->core.reg.p&HEStatus_P_CARRY)?(0x80):(0));
+            impl->core.lOperand |= ((impl->core.reg.p&RP2A03_Status_P_CARRY)?(0x80):(0));
             impl->core.rOperand = lowByte(impl->core.lOperand);
         #ifdef IMPLEMENT_PIPELINING
         }
         else {
         #endif
             impl->core.lOperand = impl->core.reg.a;
-            //carry = ((regP&HEStatus_P_CARRY)?(true):(false));
+            //carry = ((regP&RP2A03_Status_P_CARRY)?(true):(false));
             RP2A03_alu_add(impl);
             impl->core.reg.a = impl->core.lOperand;
             RP2A03_updateStatusFlagCVNZ(impl);
@@ -2927,7 +2922,7 @@ RP2A03_executeInstruction(
         else {
         #endif
             impl->core.lOperand = impl->core.reg.a;
-            impl->core.carry = (impl->core.reg.p & HEStatus_P_CARRY) != 0;
+            impl->core.carry = (impl->core.reg.p & RP2A03_Status_P_CARRY) != 0;
             RP2A03_alu_sub(impl);
             RP2A03_updateStatusFlagCV(impl);
             impl->core.reg.a = impl->core.lOperand;
@@ -3039,43 +3034,43 @@ RP2A03_executeInstruction(
 	////////////////////////////////////////////////////////////////
 	//Status flag modification Instructions
 	case HEInst_CLV:
-		impl->core.reg.p &= ~HEStatus_P_OVERFLOW;
+		impl->core.reg.p &= ~RP2A03_Status_P_OVERFLOW;
         #ifdef IMPLEMENT_PIPELINING
         impl->pipelined = false; //파이프라이닝 해제
         #endif
 	break;
 	case HEInst_CLD:
-		impl->core.reg.p &= ~HEStatus_P_DECIMAL;
+		impl->core.reg.p &= ~RP2A03_Status_P_DECIMAL;
         #ifdef IMPLEMENT_PIPELINING
         impl->pipelined = false; //파이프라이닝 해제
         #endif
 	break;
 	case HEInst_SED:
-		impl->core.reg.p |= HEStatus_P_DECIMAL;
+		impl->core.reg.p |= RP2A03_Status_P_DECIMAL;
         #ifdef IMPLEMENT_PIPELINING
         impl->pipelined = false; //파이프라이닝 해제
         #endif
 	break;
 	case HEInst_CLI:
-		impl->core.reg.p &= ~HEStatus_P_DISABLE_IRQ;
+		impl->core.reg.p &= ~RP2A03_Status_P_DISABLE_IRQ;
         #ifdef IMPLEMENT_PIPELINING
         impl->pipelined = false; //파이프라이닝 해제
         #endif
 	break;
 	case HEInst_SEI:
-		impl->core.reg.p |= HEStatus_P_DISABLE_IRQ;
+		impl->core.reg.p |= RP2A03_Status_P_DISABLE_IRQ;
         #ifdef IMPLEMENT_PIPELINING
         impl->pipelined = false; //파이프라이닝 해제
         #endif
 	break;
 	case HEInst_CLC:
-		impl->core.reg.p &= ~HEStatus_P_CARRY;
+		impl->core.reg.p &= ~RP2A03_Status_P_CARRY;
         #ifdef IMPLEMENT_PIPELINING
         impl->pipelined = false; //파이프라이닝 해제
         #endif
 	break;
 	case HEInst_SEC:
-		impl->core.reg.p |= HEStatus_P_CARRY;
+		impl->core.reg.p |= RP2A03_Status_P_CARRY;
         #ifdef IMPLEMENT_PIPELINING
         impl->pipelined = false; //파이프라이닝 해제
         #endif
@@ -3136,7 +3131,6 @@ RP2A03_dmc_setReadingEnabled(
             ;
         }
 
-        //TODO : 테스트
         RP2A03_triggerDmcDmaIfNecessary(impl, 0);
 
         //outputDebugString(
@@ -3156,9 +3150,10 @@ RP2A03_alu_add(
     struct kaphein_nes_RP2A03_Impl * impl
 )
 {
+    const kaphein_UInt8 rOperandMsb = impl->core.rOperand & 0x80;
     const kaphein_UInt16 result = impl->core.lOperand + impl->core.rOperand + (!!impl->core.carry);
-    
-    impl->core.overflow = (((impl->core.lOperand & 0x80) == (impl->core.rOperand & 0x80)) && (impl->core.rOperand & 0x80) != (result & 0x80));
+
+    impl->core.overflow = ((impl->core.lOperand & 0x80) == rOperandMsb) && (rOperandMsb != (result & 0x80));
     impl->core.carry = result > 0xFF;
     impl->core.lOperand = result & 0xFF;
 }
@@ -3169,9 +3164,10 @@ RP2A03_alu_sub(
     struct kaphein_nes_RP2A03_Impl * impl
 )
 {
+    const kaphein_UInt8 rOperandMsb = impl->core.rOperand & 0x80;
     const kaphein_UInt16 result = impl->core.lOperand + ((impl->core.rOperand ^ 0xFF) + (!!impl->core.carry));
     
-    impl->core.overflow = (((impl->core.lOperand & 0x80) != (impl->core.rOperand & 0x80)) && (impl->core.rOperand & 0x80) == (result & 0x80));
+    impl->core.overflow = ((impl->core.lOperand & 0x80) != rOperandMsb) && (rOperandMsb == (result & 0x80));
     impl->core.carry = result > 0xFF;
     impl->core.lOperand = result & 0xFF;
 };
@@ -3645,14 +3641,14 @@ RP2A03_instIoSeq_brk4(
     switch(impl->core.inst) {
     //Opcode 0x00
     case HEInst_BRK:
-        impl->core.reg.p |= HEStatus_P_BRK;
+        impl->core.reg.p |= RP2A03_Status_P_BRK;
     break;
     default:
-        impl->core.reg.p &= ~HEStatus_P_BRK;
+        impl->core.reg.p &= ~RP2A03_Status_P_BRK;
     }
 
     //U 플래그 셋
-    impl->core.reg.p |= HEStatus_P_UNUSED;
+    impl->core.reg.p |= RP2A03_Status_P_UNUSED;
 
     //P 레지스터 값 push
     impl->core.ioAddress = makeWord(impl->core.reg.s, 0x01);
@@ -3692,7 +3688,7 @@ RP2A03_instIoSeq_php(
     struct kaphein_nes_RP2A03_Impl * impl
 )
 {
-    impl->core.reg.p |= (HEStatus_P_BRK | HEStatus_P_UNUSED);
+    impl->core.reg.p |= (RP2A03_Status_P_BRK | RP2A03_Status_P_UNUSED);
     
     //P 레지스터 값 push
     impl->core.ioAddress = makeWord(impl->core.reg.s, 0x01);
@@ -3735,14 +3731,14 @@ RP2A03_instBodySeq_decodeOpcode(
             //    , impl->core.reg.x
             //    , impl->core.reg.y
             //    , impl->core.reg.s
-            //    , (!!(impl->core.reg.p & HEStatus_P_NEGATIVE) ? 'N' : 'n')
-            //    , (!!(impl->core.reg.p & HEStatus_P_OVERFLOW) ? 'V' : 'v')
-            //    , (!!(impl->core.reg.p & HEStatus_P_UNUSED) ? 'U' : 'u')
-            //    , (!!(impl->core.reg.p & HEStatus_P_BRK) ? 'B' : 'b')
-            //    , (!!(impl->core.reg.p & HEStatus_P_DECIMAL) ? 'D' : 'd')
-            //    , (!!(impl->core.reg.p & HEStatus_P_DISABLE_IRQ) ? 'I' : 'i')
-            //    , (!!(impl->core.reg.p & HEStatus_P_ZERO) ? 'Z' : 'z')
-            //    , (!!(impl->core.reg.p & HEStatus_P_CARRY) ? 'C' : 'c')
+            //    , (!!(impl->core.reg.p & RP2A03_Status_P_NEGATIVE) ? 'N' : 'n')
+            //    , (!!(impl->core.reg.p & RP2A03_Status_P_OVERFLOW) ? 'V' : 'v')
+            //    , (!!(impl->core.reg.p & RP2A03_Status_P_UNUSED) ? 'U' : 'u')
+            //    , (!!(impl->core.reg.p & RP2A03_Status_P_BRK) ? 'B' : 'b')
+            //    , (!!(impl->core.reg.p & RP2A03_Status_P_DECIMAL) ? 'D' : 'd')
+            //    , (!!(impl->core.reg.p & RP2A03_Status_P_DISABLE_IRQ) ? 'I' : 'i')
+            //    , (!!(impl->core.reg.p & RP2A03_Status_P_ZERO) ? 'Z' : 'z')
+            //    , (!!(impl->core.reg.p & RP2A03_Status_P_CARRY) ? 'C' : 'c')
             //);
         //}
 
@@ -4574,7 +4570,7 @@ RP2A03_instBodySeq_brk5(
 {
     impl->core.reg.pc = makeWord(impl->core.ioData, highByte(impl->core.reg.pc));
 
-    impl->core.reg.p |= HEStatus_P_DISABLE_IRQ;
+    impl->core.reg.p |= RP2A03_Status_P_DISABLE_IRQ;
     
     impl->core.instSeq = RP2A03_InstSeq_brk6;
 }
@@ -4633,7 +4629,7 @@ RP2A03_instBodySeq_rti1(
 )
 {
     //P 레지스터 값 pop (U, B 무시) 후 스택 포인터 증가
-    impl->core.reg.p = (impl->core.ioData & (~HEStatus_P_UB));
+    impl->core.reg.p = (impl->core.ioData & (~RP2A03_Status_P_UB));
     ++impl->core.reg.s;
 
     impl->core.instSeq = RP2A03_InstSeq_rti2;
@@ -4732,7 +4728,7 @@ RP2A03_instBodySeq_plp1(
     RP2A03_doLastInstructionCycle(impl);
 
     //P 레지스터 값 pop
-    impl->core.reg.p = (impl->core.ioData & (~HEStatus_P_UB));
+    impl->core.reg.p = (impl->core.ioData & (~RP2A03_Status_P_UB));
 }
 
 static
@@ -4810,7 +4806,7 @@ RP2A03_instBodySeq_reset4(
 {
     --impl->core.reg.s;
 
-    impl->core.reg.p |= HEStatus_P_UB;
+    impl->core.reg.p |= RP2A03_Status_P_UB;
     
     impl->core.instSeq = RP2A03_InstSeq_brk5;
 }

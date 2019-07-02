@@ -1,6 +1,6 @@
 #include "kaphein/nes/debug.h"
 #include "kaphein/mem/utils.h"
-#include "kaphein/nes/LeSr16.h"
+#include "kaphein/nes/ShiftRegister16.h"
 #include "kaphein/nes/RP2A03ApuEnvelop.h"
 #include "kaphein/nes/RP2A03ApuLengthCounter.h"
 #include "kaphein/nes/RP2A03ApuLinearCounter.h"
